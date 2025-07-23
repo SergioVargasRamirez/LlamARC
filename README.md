@@ -9,12 +9,12 @@ ARC 770 GPU installed in it. In this container nothing else is installed, which 
 
 Why not installing all the dependencies directly on my OpenSuse? Well... Intel supports Ubuntu, period. Trying to get the GPU to work on OpenSuse was... frustrating. 
 
-The main disadvantage of this solution is that the folder containing `llama.cpp` needs to mounted in the container and compiled using the container libraries once. Also, if you need to quantize the LLM you intend to use, you will need to enter the container, attach the folder with the LLMs and with `llama.cpp`, install requirements for the quantize to work and run the programs manually.
+The main disadvantage of this solution is that the folder containing `llama.cpp-b2906` needs to mounted in the container and compiled using the container libraries once. Also, if you need to quantize the LLM you intend to use, you will need to enter the container, attach the folder with the LLMs and with `llama.cpp-b2906`, install requirements for the quantize to work and run the programs manually.
 
 At least for now, I implemented a `setup.sh` script that takes care of a number of things, like:
 
  1. Building/pulling the required `docker` images.
- 2. Downloading the specific `commit` of `llama.cpp` that worked for me. And,
+ 2. Downloading the specific `release` of `llama.cpp` that worked for me (i.e., b2906 from May 17, 2024). And,
  3. Compiling `llama.cpp` with ARC770 support.
  
  I will try to include a `quantize` script as soon as I need one.
@@ -47,14 +47,14 @@ docker image ls
 
 ```
 
-You should also have a `llama.cpp` folder. Inside this folder you should have a folder `build/bin` with `llama.cpp` executables inside. It is a good practice to `chown` all folders and files to make your user the owner; I would not leave `root` as the owner or run anything as `root` but you know this.
+You should also have a `llama.cpp-b2906` folder. Inside this folder you should have a folder `build/bin` with `llama.cpp` executables inside. It is a good practice to `chown` all folders and files to make your user the owner; I would not leave `root` as the owner or run anything as `root` but you know this.
 
 `llama.cpp` expects the LLMs to be located inside LlamARC in a folder named `models`. I created have a symbolic link to a larger HD where I actually keep the LLMs. In my case: `ln -s /mnt/scratch/LLModels/ models` works. 
 
 2. To launch all the services, i.e. the `llama.cpp` server, dockling, and open-webui, on a terminal run:
 
 ```sh
-docker-compose up
+docker-compose -f docker-compose.run.yml up
 ```
 
 Check the three containers run. 
@@ -62,28 +62,24 @@ Check the three containers run.
 3. Once the tests finished, type the following on a different terminal.
 
 ```sh
-docker-compose down
+docker-compose -f docker-compose.run.yml down
 ``` 
 
 ---
 
+## Notes:
 
 ### Configure Open WebUI
 
-After creating an Admin user, go to Setting->Connections, add a new connection and use the url of your llama.cpp server. In my case `http://minimuc:8081/v1`. Verify your connection is
-working and check whether your local LLM can be selected from the dropdown.
-
+After creating an `Admin` user, go to `Setting->Connections`, add a new connection and use the `url` of your `llama.cpp` server. In my case `http://minimuc:8081/v1`. Verify your connection is working and check whether your local LLM can be selected from the dropdown.
 
 ### Configure Docling from Open WebUI
 
-Go to the Admin Panel -> Documents. There, select `Docling` as the `Content Extraction Engine`. Edit the address, in my case the address is `http://minimuc:5001`. In my case, the OCR engine is
-`easyocr` and the languages `en,es,fr,de`; this is different from the default. I have not played with the settings yet.
+Go to the `Admin Panel -> Documents`. There, select `Docling` as the `Content Extraction Engine`. Edit the address, in my case the address is `http://minimuc:5001`. In my case, the OCR engine is `easyocr` and the languages `en,es,fr,de`; this is different from the default. I have not played with the settings yet.
 
-## Extras
+### llama.cpp release used
 
-### Clone and compile llama.cpp
-
-I have been using `commit 24ecb581`, which seems to work with my ARC 770 without much trouble.
+I have been using `commit 24ecb581` or release `b2906` which work with my ARC 770 without much trouble. Other releases I tested did not work somehow.
 
 ### Quantize the model
 
@@ -99,7 +95,9 @@ python3 convert.py /models/CodeLlama-13b-Instruct-hf/
 
 ```
 
-### Setup VS Codium
+I intent to create a `docker-compose.quantize.yml` to simplify this. At this point you need to start the container or modify the compose file.
+
+### Set up VS Codium for autocompletion and code assistance
 
 1. Install `Continue - open-source AI code assistant` and configure it to use your local `llama.cpp` server; you will need to know the ip and port of your local `llama.cpp` server
 
