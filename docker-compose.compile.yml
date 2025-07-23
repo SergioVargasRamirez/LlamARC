@@ -4,7 +4,7 @@ services:
         image: jammy_arc770:latest
         container_name: jammy_arc770
         volumes:
-            - ./llama.cpp:/llama.cpp
+            - ./llama.cpp-b2906:/llama.cpp
             - ./llama.cpp.scripts:/llama.cpp.scripts
         devices:
             - /dev/dri:/dev/dri

@@ -8,7 +8,7 @@ services:
         ports:
             - "8081:8081"
         volumes:
-            - ./llama.cpp/build/bin:/llama.cpp
+            - ./llama.cpp-b2906/build/bin:/llama.cpp
             - ./models:/models
             - ./llama.cpp.scripts:/llama.cpp.scripts
         devices:
