@@ -9,7 +9,7 @@
 
 #expected paths
 DOCKERFILES_DIR="./dockerfiles"
-LLAMACPP="./llama.cpp"
+LLAMACPP="./llama.cpp-b2906"
 OPENWEBUI="./open-webui"
 
 #The script will:
@@ -73,23 +73,21 @@ done
 ##################################
 
 LLAMA_URL="https://github.com/ggml-org/llama.cpp.git"
-LLAMACPP_COMMIT="24ecb58168dce81646c2ed425690a106591c8c6d"
+LLAMACPP_RELEASE="https://github.com/ggml-org/llama.cpp/archive/refs/tags/b2906.tar.gz"
+#LLAMACPP_COMMIT="24ecb58168dce81646c2ed425690a106591c8c6d"
 
 if [ ! -d "$LLAMACPP" ]; then
-    echo "$LLAMACPP does not exist. Cloning llama.cpp commit $LLAMACPP_COMMIT"
+    echo "$LLAMACPP does not exist. Downloading llama.cpp release b2906"
 
-    #this cloning strategy was taken from:
-    #https://stackoverflow.com/questions/75454944/how-to-clone-a-repository-from-a-specific-commit-id
-
-    mkdir llama.cpp && cd llama.cpp
-    git init
-    git remote add origin $LLAMA_URL
-    git fetch origin $LLAMACPP_COMMIT
-    git checkout FETCH_HEAD
-    cd ..
+    #download possible working release
+    wget $LLAMACPP_RELEASE
+    tar -xvzf b2906.tar.gz
+    
     # compile llama.cpp with the jammy_arc770 container
     
     docker-compose -f docker-compose.compile.yml up
+
+    rm b2906.tar.gz
 
 else
     echo "$LLAMACPP exists."
