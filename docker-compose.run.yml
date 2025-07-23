@@ -1,0 +1,41 @@
+version: '0.1'
+services:
+    llama.cpp:
+        image: jammy_arc770:latest
+        container_name: jammy_arc770
+        networks:
+            - localLLM
+        ports:
+            - "8081:8081"
+        volumes:
+            - ./llama.cpp/build/bin:/llama.cpp
+            - ./models:/models
+            - ./llama.cpp.scripts:/llama.cpp.scripts
+        devices:
+            - /dev/dri:/dev/dri
+        command: /bin/bash -c "/llama.cpp.scripts/run_server_llama.sh"
+    docling:
+        image: ghcr.io/docling-project/docling-serve:v0.16.1
+        container_name: docling
+        networks:
+            - localLLM
+        ports:
+            - "5001:5001"
+        environment:
+            - DOCLING_SERVE_ENABLE_UI=1
+        depends_on:
+            - llama.cpp
+    open-webui:
+        image: ghcr.io/open-webui/open-webui:main
+        container_name: open-webui
+        volumes:
+             - ./open-webui:/app/backend/data
+        networks:
+            - localLLM
+        ports:
+            - "3000:8080"
+        depends_on:
+            - docling
+networks:
+    localLLM:
+        name: localLLM
