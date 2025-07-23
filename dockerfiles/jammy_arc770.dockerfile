@@ -60,14 +60,3 @@ intel-oneapi-dnnl-devel=2024.0.0-49521 \
 intel-oneapi-dnnl=2024.0.0-49521 \
 intel-oneapi-tcm-1.0=1.0.0-435
 
-#get .bashrc ready to set the environment before running llama.cpp
-#RUN echo "source /opt/intel/oneapi/setvars.sh" >>/root/.bashrc
-#RUN echo "export USE_XETLA=OFF" >>/root/.bashrc
-#RUN echo "export SYCL_PI_LEVEL_ZERO_USE_IMMEDIATE_COMMANDLISTS=1" >>/root/.bashrc
-#RUN echo "export SYCL_CACHE_PERSISTENT=1" >>/root/.bashrc
-#RUN echo "export ZES_ENABLE_SYSMAN=1" >>/root/.bashrc
-
-#EXPOSE 8081
-
-#ENTRYPOINT [ "/bin/bash" ]
-#CMD bash /llama.cpp.scripts/run_server_llama.sh
