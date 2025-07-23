@@ -49,7 +49,7 @@ docker image ls
 
 You should also have a `llama.cpp` folder. Inside this folder you should have a folder `build/bin` with `llama.cpp` executables inside. It is a good practice to `chown` all folders and files to make your user the owner; I would not leave `root` as the owner or run anything as `root` but you know this.
 
-`llama.cpp` expects the LLMs to be located inside LlamARC in a folder named `models`. I created have a symbolic link to a larger HD where I actually keep the LLMs. It also works. 
+`llama.cpp` expects the LLMs to be located inside LlamARC in a folder named `models`. I created have a symbolic link to a larger HD where I actually keep the LLMs. In my case: `ln -s /mnt/scratch/LLModels/ models` works. 
 
 2. To launch all the services, i.e. the `llama.cpp` server, dockling, and open-webui, on a terminal run:
 
