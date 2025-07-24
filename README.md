@@ -83,14 +83,20 @@ I have been using `commit 24ecb581` or release `b2906` which work with my ARC 77
 
 ### Quantize the model
 
-In case you need to quatize the model, inside the jammy_arc770 container run:
+In case you need to quatize the model, first, start an interactive container with `bash`
+
+```sh
+docker run -it --rm --device=/dev/dri --volume /mnt/scratch/LLModels/Meta-Llama-3-8B-Instruct/:/models/Meta --volume ./llama.cpp-b2906:/llama.cpp --name llama.cpp jammy_arc770 bash
+```
+Inside the jammy_arc770 container run:
+
 
 ```sh
 #install the required packages for convert.py to run
 python3 -m pip install -r requirements.txt
 #run convert.py to get a gguf f32 model
-python3 convert.py /models/CodeLlama-13b-Instruct-hf/
-#run quantize with the desired option, below using Q4_K_M
+python3 convert.py --vocab-type bpe /models/Meta-Llama-3-8B-Instruct/
+#run quantize with the desired option, below using Q4_K_M or Q5_K_M
 ./build/bin/quantize /models/CodeLlama-13b-Instruct-hf/CodeLlama-13b-Instruct-hf-13B-F32.gguf /models/CodeLlama-13b-Instruct-hf/CodeLlama-13b-Instruct-hf-13B-Q4_K_M.gguf Q4_K_M
 
 ```
