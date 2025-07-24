@@ -1,6 +1,8 @@
 # LlamARC - Local, dockerized RAG and Coding Assistant with Intel ARC770 support
 
-This repository provides a local, dockerized RAG and Coding Assistant I have been using to experiment with my ARC770 GPU. 
+This repository provides a local, dockerized RAG and Coding Assistant I have been using to experiment with my ARC770 GPU.
+
+**Note: the system works, but is not stable!!! Why? I'm on it. I guess is llama.cpp but I am not 100% sure.**
 
 After many experiments, I settled on this solution. It uses [Llama.cpp](https://github.com/ggml-org/llama.cpp.git) to serve LLMs locally on an Intel ARC 770 GPU, which substatially accelerates the interaction with the LLMs.
 
